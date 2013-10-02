@@ -2,7 +2,7 @@ unit xnb;
 {$mode objfpc}{$H+}
 interface
 	uses
-		classes;
+		Classes;
 	type
 		PXNBHeader = ^TXNBHeader;
 		TXNBHeader = record
