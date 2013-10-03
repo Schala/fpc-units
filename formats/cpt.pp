@@ -1,26 +1,23 @@
-unit pac;
+unit cpt;
 {$mode objfpc}{$H+}
 interface
 	uses
 		Classes;
+
 	type
-		PMetadata = ^TMetadata;
-		TMetadata = record
-			file_num: dword
-			size: dword;
-		end;
-		
-		PFileEntry = ^TFileEntry;
+		PPFileEntry = ^PFileEntry;
+		PFileEntry = ^TFileEntry
 		TFileEntry = record
 			offset: dword;
-			filepath: string[32];
+			path: string;
+			buffer: pointer;
 		end;
 		
-		TPACContainer = class
+		TCPTContainer = class
 		private
-			FMetadata: PMetadata;
-			FFileEntries: array of PFileEntry;
-			FFileBuffers: ppointer;
+			FFileNum: dword;
+			FEof: dword;
+			FFiles: PPFileEntry;
 			FHandle: TFileStream;
 		public
 			constructor Create(const filename: string);

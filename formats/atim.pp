@@ -24,10 +24,11 @@ interface
 			halfheight: word;
 		end;
 		
+		PPImage = ^PImage;
 		PImage = ^TImage;
 		TImage = record
 			header: PImageHeader;
-			pixel_offsets: array of byte;
+			pixel_offsets: pbyte;
 		end;
 		
 		PATIMHeader = ^TATIMHeader;
@@ -39,16 +40,16 @@ interface
 		TAlteredTIM = class
 		private
 			FHeader: PATIMHeader;
-			FImageOffsets: array of dword;
+			FImageOffsets: pdword;
 			FCLUTHeader: PCLUTHeader;
-			FRGBS: array of word;
-			FImages: array of PImage;
+			FRGBS: pword;
+			FImages: PPImage;
 			FHandle: TFileStream;
 		public:
 			constructor Create(const filename: string);
-			constructor Unpack(const buffer: array of byte);
+			constructor Unpack(const buffer: pointer);
 			destructor Destroy; override;
-			function Pack: array of byte;
+			function Pack: pointer;
 		end;
 implementation
 end.

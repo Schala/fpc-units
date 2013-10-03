@@ -6,33 +6,35 @@ interface
 	type
 		PXNBHeader = ^TXNBHeader;
 		TXNBHeader = record
-			id: array[0..2] of byte;
-			target: byte; // w = Windows, m = Win Phone, x = Xbox 360
+			id: string[3];
+			target: char; // w = Windows, m = Win Phone, x = Xbox 360
 			version: byte; // 5 = XNA Game Studio 4.0
 			flags: byte; // $01 = HiDef profile content, $80 = compressed
  			csize: dword; // total compressed size including header
  			dsize: word; // decompressed size, not including header
 		end;
 		
+		PPTypeReaderEntry = ^PTypeReaderEntry;
 		PTypeReaderEntry = ^TTypeReaderEntry;
 		TTypeReaderEntry = record
 			name: string;
 			version: longint;
 		end;
 		
+		PPSharedResource = ^PSharedResource;
 		PSharedResource = ^TSharedResource;
 		TSharedResource = record
 			shared_res: pointer;
-			data: array of byte;
+			data: pointer;
 		end;
 	
 		TXNBContainer = class
 		private
 			FHeader: PXNBHeader;
 			FTypeReaderCount: longint;
-			FTypeReaderEntries: array of PTypeReaderEntry;
+			FTypeReaderEntries: PPTypeReaderEntry;
 			FSharedResCount: longint;
-			FSharedResources: array of PSharedResource;
+			FSharedResources: PPSharedResource;
 			FHandle: TFileStream;
 		public
 			constructor Create(const filename: string);
