@@ -3,6 +3,10 @@ unit xnb;
 interface
 	uses
 		Classes;
+	
+	const
+		MAGIC = 'XNB';
+		
 	type
 		PXNBHeader = ^TXNBHeader;
 		TXNBHeader = record

@@ -5,9 +5,7 @@ interface
 		Classes;
 		
 	const
-		IDV0 = 'BLP0';
-		IDV1 = 'BLP1';
-		IDV2 = 'BLP2';
+		MAGIC = 'BLP';
 	
 	type
 		PBLP1Header = ^TBLP1Header;
@@ -52,7 +50,8 @@ interface
 		
 		TBLPImage = class
 		private
-			FId: string[4];
+			FId: string[3];
+			FVersion: byte;
 			FHeader1: PBLP1Header;
 			FHeader2: PBLP2Header;
 			FJpeg: PBLPJpeg;

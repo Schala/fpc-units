@@ -10,6 +10,7 @@ interface
 			size: dword;
 		end;
 		
+		PPFileEntry = ^PFileEntry;
 		PFileEntry = ^TFileEntry;
 		TFileEntry = record
 			offset: dword;
@@ -19,7 +20,7 @@ interface
 		TPACContainer = class
 		private
 			FMetadata: PMetadata;
-			FFileEntries: array of PFileEntry;
+			FFileEntries:  PPFileEntry;
 			FFileBuffers: ppointer;
 			FHandle: TFileStream;
 		public
