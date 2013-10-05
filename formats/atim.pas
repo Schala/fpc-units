@@ -1,55 +1,30 @@
 unit atim;
-{$mode objfpc}{$H+}
 interface
-	uses
-		Classes;
 	type
-		PCLUTHeader = ^TCLUTHeader;
-		TCLUTHeader = record
-			length: dword;
-			width: word;
-			height: word;
-			palette_colors: word;
-			palette_num: word;
-		end;
-		
-		PImageHeader = ^TImageHeader;
-		TImageHeader = record
-			length: dword;
-			width: word;
-			height: word;
-			palette_colors: word;
-			palette_num: word;
-			halfwidth: word;
-			halfheight: word;
-		end;
-		
-		PPImage = ^PImage;
 		PImage = ^TImage;
 		TImage = record
-			header: PImageHeader;
-			pixel_offsets: pbyte;
+			length: dword;
+			x: word;
+			y: word;
+			colors: word;
+			palettes: word;
+			halfx: word;
+			halfy: word;
+			pixel_offsets: array of byte;
 		end;
 		
-		PATIMHeader = ^TATIMHeader;
-		TATIMHeader = record
+		PAlteredTIM = ^TAlteredTIM;
+		TAlteredTIM = record
 			objnum: dword;
 			clut_offset: dword;
-		end;
-		
-		TAlteredTIM = class
-		private
-			FHeader: PATIMHeader;
-			FImageOffsets: pdword;
-			FCLUTHeader: PCLUTHeader;
-			FRGBS: pword;
-			FImages: PPImage;
-			FHandle: TFileStream;
-		public:
-			constructor Create(const filename: string);
-			constructor Unpack(const buffer: pointer);
-			destructor Destroy; override;
-			function Pack: pointer;
+			image_offsets: array of dword;
+			clut_length: dword;
+			clut_x: word;
+			clut_y: word;
+			clut_colors: word;
+			clut_palettes: word;
+			rgbs: array of word;
+			images: array of TImage;
 		end;
 implementation
 end.

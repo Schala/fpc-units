@@ -1,9 +1,5 @@
 unit drp;
-{$mode objfpc}{$H+}
 interface
-	uses
-		Classes;
-	
 	const
 		MAGIC = 'drp';
 		T_DRP = 1;
@@ -24,7 +20,6 @@ interface
 		T_LZSS = 37;
 	
 	type
-		PPFileEntry = ^PFileEntry;
 		PFileEntry = ^TFileEntry;
 		TFileEntry = record
 			name: string[4];
@@ -33,18 +28,11 @@ interface
 			buffer: pointer;
 		end;
 		
-		TDynamicResourcePack = class
-		private
-			FId: string[3];
-			FFileCount: dword;
-			FFileEntries: PPFileEntry;
-			FHandle: TFileStream;
-		public
-			constructor Create(const filename: string);
-			constructor Unpack(const buffer: pointer);
-			destructor Destroy; override;
-			procedure Add(const filename: string);
-			function Pack: pointer;
+		PDynamicResourcePack = ^TDynamicResourcePack;
+		TDynamicResourcePack = record
+			id: string[3];
+			files: dword;
+			entries: array of TFileEntry;
 		end;
 		
 	function GetFileExt(ft: byte): string;

@@ -1,30 +1,19 @@
 unit ips;
-{$mode objfpc}{$H+}
 interface
-	uses
-		Classes;
-	
 	const
 		MAGIC = 'PATCH';
-		EOF = 'EOF';
+		EOFMARKER = 'EOF';
 	
 	type
-		TIPSPatch = class
-		private
-			FOffset: dword;
-			FSize: word;
-			FRleSize: word;
-			FData: pointer;
-			FValue: byte;
-			FHandle: TFileStream;
-			procedure SetData(buf: pointer);
-		public:
-			constructor Create(const filename: string);
-			destructor Destroy; override;
-			property Offset: dword read FOffset write FOffset;
-			property Size: word read FSize;
-			property RLESize: word read FRleSize;
-			property Data: pointer read FData write SetData;
+		PIPSPatch = ^TIPSPatch;
+		TIPSPatch = record
+			id: string[5];
+			offset: dword;
+			size: word;
+			rlesize: word;
+		case boolean of
+			false: (data: pointer);
+			true: (value: byte);
 		end;
 implementation
 end.
