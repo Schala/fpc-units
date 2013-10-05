@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>atim: record TAlteredTIM</title>
+<meta name="generator" content="PasDoc 0.13.0">
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TAlteredTIM"></a><h1 class="cio">record TAlteredTIM</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td>Hierarchy</td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td>Methods</td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="atim.html">atim</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TAlteredTIM = record</code></p>
+<h2 class="description">Description</h2>
+<p>
+Like the Classic TIM, the altered format &tilde;TIMs consist of a HEADER, CLUT, and IMAGE data &ndash; only the headers for each element are different.</p>
+<h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="atim.TAlteredTIM.html#objnum">objnum</a></b>: dword;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="atim.TAlteredTIM.html#clut_offset">clut_offset</a></b>: dword;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="atim.TAlteredTIM.html#image_offsets">image_offsets</a></b>: array of dword;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="atim.TAlteredTIM.html#clut_length">clut_length</a></b>: dword;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="atim.TAlteredTIM.html#clut_x">clut_x</a></b>: word;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="atim.TAlteredTIM.html#clut_y">clut_y</a></b>: word;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="atim.TAlteredTIM.html#clut_colors">clut_colors</a></b>: word;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="atim.TAlteredTIM.html#clut_palettes">clut_palettes</a></b>: word;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="atim.TAlteredTIM.html#rgbs">rgbs</a></b>: array of word;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="atim.TAlteredTIM.html#images">images</a></b>: array of <a  href="atim.TImage.html">TImage</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="objnum"></a><code><b>objnum</b>: dword;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Number of Objects in the file. The first object is the CLUT; all subsequent objects are texture &tilde;IMAGEs.</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="clut_offset"></a><code><b>clut_offset</b>: dword;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="image_offsets"></a><code><b>image_offsets</b>: array of dword;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="clut_length"></a><code><b>clut_length</b>: dword;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="clut_x"></a><code><b>clut_x</b>: word;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="clut_y"></a><code><b>clut_y</b>: word;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="clut_colors"></a><code><b>clut_colors</b>: word;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="clut_palettes"></a><code><b>clut_palettes</b>: word;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="rgbs"></a><code><b>rgbs</b>: array of word;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+RG BS are the red, green, blue, and special transparency values for each color in the CLUT. Note that these byte pairs are read as their constituent bits, so one nybble (half-byte) doesn't necessarily correspond to each color specification; one letter is used to represent each nybble for ease of labeling. For quick reference, the RG BS CLUT data in an Altered Format TIM typically occurs between addresses $1C and $21C.</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="images"></a><code><b>images</b>: array of <a  href="atim.TImage.html">TImage</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+For quick reference, the image data in an Altered Format TIM usually follows address $22C</p>
+</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.13.0</a> on 2013-10-04 19:30:24</em>
+</span>
+</td></tr></table></body></html>
