@@ -1,6 +1,7 @@
 { The drp file, which begins with the ASCII letters "drp" and almost always
 contains visual or audio resources. }
 unit drp;
+{$modeswitch result}
 interface
 	const
 		{ The first three bytes spell out "drp" in ASCII. }
@@ -83,17 +84,17 @@ implementation
 	function GetFileExt(ft: byte): string;
 	begin
 		case ft of
-			T_DRP: GetFileExt := '.drp';
-			T_MESH: GetFileExt := '.mesh';
-			T_TIMINFO: GetFileExt := '.timinfo';
-			T_TIM: GetFileExt := '.tim';
-			T_MINST: GetFileExt := '.minst';
-			T_MDL: GetFileExt := '.mdl';
-			T_MSEQ: GetFileExt := '.mseq';
-			T_ANIM: GetFileExt := '.anim';
-			T_LZSS: GetFileExt := '.lzss';
+			T_DRP: result := '.drp';
+			T_MESH: result := '.mesh';
+			T_TIMINFO: result := '.timinfo';
+			T_TIM: result := '.tim';
+			T_MINST: result := '.minst';
+			T_MDL: result := '.mdl';
+			T_MSEQ: result := '.mseq';
+			T_ANIM: result := '.anim';
+			T_LZSS: result := '.lzss';
 		else
-			GetFileExt := '.out';
+			result := '.out';
 		end;
 	end;
 end.
