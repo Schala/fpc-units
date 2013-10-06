@@ -11,9 +11,9 @@ interface
 		which lack one. After that, the files are packed in one after the other. }
 		TCPTContainer = record
 			files: dword;
-			offsets: array of dword;
+			offsets: pdword;
 			eofpos: dword;
-			bufs: array of pointer;
+			bufs: ppointer;
 		end;
 implementation
 end.

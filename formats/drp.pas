@@ -75,7 +75,7 @@ interface
 			the files inside the lump. These pointers are 4 bytes each, little-endian
 			(that is, with the byte order reversed from what the naive viewer will expect),
 			and indicate an offset based on the beginning of the file. }
-			entries: array of TFileEntry;
+			entries: PFileEntry;
 		end;
 		
 	function GetFileExt(ft: byte): string;

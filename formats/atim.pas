@@ -15,7 +15,7 @@ interface
 			halfy: word;
 			{ Offsets into the CLUT. One byte (8 bits) is required for each pixel because
 			the TIM header specifies 8 bits-per-pixel. }
-			pixel_offsets: array of byte;
+			pixel_offsets: pbyte
 		end;
 		
 		PAlteredTIM = ^TAlteredTIM;
@@ -26,7 +26,7 @@ interface
 			objects are texture ~IMAGEs. }
 			objnum: dword;
 			clut_offset: dword;
-			image_offsets: array of dword;
+			image_offsets: pdword;
 			clut_length: dword;
 			clut_x: word;
 			clut_y: word;
@@ -38,10 +38,10 @@ interface
 			one letter is used to represent each nybble for ease of labeling. For quick reference,
 			the RG BS CLUT data in an Altered Format TIM typically occurs between addresses
 			$1C and $21C.}
-			rgbs: array of word;
+			rgbs: pword;
 			{ For quick reference, the image data in an Altered Format TIM usually follows
 			address $22C }
-			images: array of TImage;
+			images: PImage;
 		end;
 implementation
 end.

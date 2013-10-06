@@ -11,7 +11,7 @@ interface
 		TPACContainer = record
 			files: dword;
 			size: dword;
-			metadata: array of TFileMetadata;
+			metadata: PFileMetadata;
 		end;
 implementation
 end.
