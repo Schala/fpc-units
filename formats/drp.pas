@@ -5,7 +5,7 @@ unit drp;
 interface
 	const
 		{ The first three bytes spell out "drp" in ASCII. }
-		MAGIC = 'drp';
+		DRPMagic = 'drp';
 		{ nested drp file }
 		T_DRP = 1;
 		{ generic mesh }

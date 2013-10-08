@@ -6,10 +6,10 @@ interface
 	const
 		{ The header starts with a 'tag' byte; this value is constant for all TIM files
 		and must be $10. }
-		MAGIC = $10;
+		TIMMagic = $10;
 		{ denotes the version of the file format. At present, only version '0' TIM files
 		are known to exist. }
-		TIM_VERSION = 0;
+		TIMVersion = 0;
 		{ 4-bit (color indices) }
 		BPP4 = $08;
 		{ 8-bit (color indices) }

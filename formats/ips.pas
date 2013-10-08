@@ -10,9 +10,9 @@ interface
 	const
 		{ The header show ever the same string: PATCH note that the string is not
 		NULL terminated. }
-		MAGIC = 'PATCH';
+		IPSMagic = 'PATCH';
 		{ A string (not NULL terminated) saying EOF }
-		EOFMARKER = 'EOF';
+		EOFMarker = 'EOF';
 	
 	type
 		PIPSPatch = ^TIPSPatch;
