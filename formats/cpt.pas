@@ -62,7 +62,7 @@ implementation
 				writeln('WARNING: End-of-file marker does not equal stream size!');
 		end else
 			FEofPos := AStream.size;
-		for i:=0 to l-1 do begin
+		for i:=0 to l-1 do
 			with FFiles[i] do begin
 				buf := TMemoryStream.Create;
 				AStream.seek(offset, sofrombeginning);
@@ -71,7 +71,6 @@ implementation
 				else
 					buf.copyfrom(AStream, FFiles[i+1].offset - offset);
 			end;
-		end;
 	end;
 	
 	destructor TCPTContainer.Destroy;
