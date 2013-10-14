@@ -1,73 +1,138 @@
 { A cpt file is a container used for other files. Unlike the drp format, it doesn't
 give any information about what those files are, leaving us to guess. }
 unit cpt;
-{$modeswitch result}
+{$mode objfpc}{$H+}
 interface
-	const
-		F_NoEOFPtr = 1;
+	uses
+		classes;
 	
 	type
-		PCPTContainer = ^TCPTContainer;
 		{ A cpt begins with a four-byte little-endian giving the number of subfiles it
 		contains, followed by a series of four-byte pointers indicating the beginning of
 		each subfile relative to the beginning of the cpt. A true cpt has an end-of-file
 		pointer as well, but the Chrono Cross CDs also include variations on the format
 		which lack one. After that, the files are packed in one after the other. }
-		TCPTContainer = record
-			files: dword;
-			offsets: pdword;
-			flags: byte;
-			eofpos: dword;
-			bufs: ppointer;
+		TCPTContainer = class
+		private type
+			TFileEntry = record
+				offset: dword;
+				buf: TMemoryStream;
+			end;
+		private var
+			FHasEOFMarker: boolean;
+			FEofPos: dword;
+			FFiles: array of TFileEntry;
+		public
+			constructor Create(AHasEOFMarker: boolean = false); overload;
+			constructor Create(AStream: TStream; AHasEOFMarker: boolean = false); overload;
+			destructor Destroy; override;
+			procedure Add(const filename: string);
+			function Pack: TMemoryStream;
+			procedure ExtractAll;
+			property HasEOFMarker: boolean read FHasEOFMarker;
+			property EofPos: dword read FEofPos;
 		end;
-	
-	function NewCPT: PCPTContainer;
-	procedure AddToCPT(var p: TCPTContainer; const filename: string);
-	function PackCPT(const p: TCPTContainer, const name: string): file;
-	function UnpackCPT(const buf: pointer): PCPTContainer;
+
 implementation
 	uses
 		sysutils;
-	
-	function NewCPT: PCPTContainer;
+
+	constructor TCPTContainer.Create(AHasEOFMarker: boolean);
 	begin
-		new(result);
-		with result^ do begin
-			files := 0;
-			offsets := nil;
-			bufs := nil;
+		FHasEOFMarker := AHasEOFMarker;
+		if FHasEOFMarker then
+			FEofPos := 8
+		else
+			FEofPos := 4;
+		FFiles := nil;
+	end;
+	
+	constructor TCPTContainer.Create(AStream: TStream; AHasEOFMarker: boolean);
+	var
+		i, l: dword;
+	begin
+		FHasEOFMarker := AHasEOFMarker;
+		setlength(FFiles, leton(AStream.readdword));
+		l := length(FFiles);
+		for i:=0 to l-1 do
+			FFiles[i].offset := leton(AStream.readdword);
+		if FHasEOFMarker then begin
+			FEofPos := leton(AStream.readdword);
+			if FEofPos <> AStream.size then
+				writeln('WARNING: End-of-file marker does not equal stream size!');
+		end else
+			FEofPos := AStream.size;
+		for i:=0 to l-1 do begin
+			with FFiles[i] do begin
+				buf := TMemoryStream.Create;
+				AStream.seek(offset, sofrombeginning);
+				if i = l-1 then
+					buf.copyfrom(AStream, AStream.size - offset)
+				else
+					buf.copyfrom(AStream, FFiles[i+1].offset - offset);
+			end;
 		end;
 	end;
 	
-	procedure AddToCPT(var p: TCPTContainer; const filename: string);
+	destructor TCPTContainer.Destroy;
 	var
-		f: file;
+		i: dword;
 	begin
-		if fileexists(filepath) then begin
-			assign(f, filename);
-			reset(f, 1);
-			inc(p.files);
-			if p.files = 1 then begin
-				p.offsets := getmem(sizeof(dword));
-				p.offsets[0] := 4;
-				p.bufs := getmem(sizeof(pointer));
-				p.bufs[0] := getmem(filesize(f));
-				blockread(f, p.bufs[0,0], filesize(f));
-			else begin
-				p.offsets := reallocmem(p.offsets, sizeof(dword) * p.files);
-				p.offsets[p.files-1] := 4 + (p.files * 4);
-				p.bufs := reallocmem(p.bufs, sizeof(pointer) * p.files);
-				p.bufs[p.files-1] := getmem(filesize(f));
-				blockread(f, p.bufs[p.files-1, 0], filesize(f));
-			end;
-			close(f);
+		if FFiles <> nil then
+			for i:=0 to length(FFiles)-1 do
+				FFiles[i].buf.free;
+		setlength(FFiles, 0);
 	end;
 	
-	function PackCPT(const p: TCPTContainer, const name: string): file;
+	procedure TCPTContainer.Add(const filename: string);
 	var
-		x, y: dword;
+		f: TFileStream;
+		i, l: dword;
 	begin
-		assign(result, name);
-		rewrite(
+		if fileexists(filename) then begin
+			f := TFileStream.Create(filename, fmopenread);
+			setlength(FFiles, length(FFiles)+1);
+			l := length(FFiles);
+			with FFiles[l-1] do begin
+				buf := TMemoryStream.Create;
+				buf.copyfrom(f, 0);
+				f.free;
+				offset := FEofPos+4;
+				inc(FEofPos, buf.size+4);
+			end;
+			if l > 1 then
+				for i:=0 to l-2 do
+					inc(FFiles[i].offset, 4);
+		end;
+	end;
+	
+	function TCPTContainer.Pack: TMemoryStream;
+	var
+		i, l: dword;
+	begin
+		l := length(FFiles);
+		result := TMemoryStream.Create;
+		result.writedword(ntole(l));
+		for i:=0 to l-1 do
+			result.writedword(ntole(FFiles[i].offset));
+		if FHasEOFMarker then
+			result.writedword(ntole(FEofPos));
+		for i:=0 to l-1 do
+			result.copyfrom(FFiles[i].buf, 0);
+	end;
+	
+	procedure TCPTContainer.ExtractAll;
+	var
+		f: TFileStream;
+		i, l: dword;
+		idxstr: string;
+	begin
+		l := length(FFiles);
+		for i:=0 to l-1 do begin
+			str(i, idxstr);
+			f := TFileStream.Create(idxstr+'.out', fmcreate);
+			f.copyfrom(FFiles[i].buf, 0);
+			f.free;
+		end;
 	end;
 end.

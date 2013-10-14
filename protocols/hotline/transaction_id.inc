@@ -47,13 +47,13 @@ ID_Version = 160;
 ID_BannerID = 161;
 // Binary
 ID_ServerName = 162;
-// THLFileInfo
+// Binary
 ID_FileInfo = 200;
 // String
 ID_FileName = 201;
-// THLPath
+// Binary
 ID_FilePath = 202;
-// THLFileResume
+// Binary
 ID_FileResume = 203;
 // Integer
 ID_FileXferOptions = 204;
@@ -63,9 +63,9 @@ ID_FileTypeStr = 205;
 ID_FileMakerStr = 206;
 // Integer
 ID_FileSize = 207;
-// THLDate
+// Binary
 ID_FileMakeDate = 208;
-// THLDate
+// Binary
 ID_FileModDate = 209;
 // String
 ID_FileBlurb = 210;
@@ -81,18 +81,18 @@ ID_Quote = 214;
 ID_AutoReply = 215;
 // Integer
 ID_DirItemCount = 220;
-// THLUserInfo
+// Binary
 ID_UserInfo = 300;
 ID_NewsCatGUID = 319;
-// THLNewsCategoriesData1
+// Binary
 ID_NewsCatsDataV1 = 320;
-// THLNewsArticlesData
+// Binary
 ID_NewsArtsData = 321;
 // String
 ID_NewsCatName = 322;
-// THLNewsCategoriesData2
+// Binary
 ID_NewsCatsDataV2 = 323;
-// THLPath
+// Binary
 ID_NewsPath = 325;
 // Integer
 ID_NewsArtID = 326;
@@ -102,7 +102,7 @@ ID_NewsArtMIME = 327;
 ID_NewsArtTitle = 328;
 // String
 ID_NewsArtPoster = 329;
-// THLDate
+// Binary
 ID_NewsArtDate = 330;
 // Integer
 ID_PrevArtID = 331;

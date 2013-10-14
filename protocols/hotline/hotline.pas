@@ -1,40 +1,49 @@
 unit hotline;
 {$mode objfpc}{$H+}
+{$modeswitch advancedrecords}
+{$inline on}
 interface
+	uses
+		Classes, fpSock, gvector;
+
 	const
 		{ $54525450 }
-		ProtocolID = 'TRTP';
-		SubProtocolID = 'HOTL';
-		TrackerMagic = 'HTRK';
+		HLProtocolID = 'TRTP';
+		HLSubProtocolID = 'HOTL';
+		HLTrackerMagic = 'HTRK';
 		{ $48545846 }
-		FileXferProtocolID = 'HTXF';
-		FileResumeMagic = 'RFLT';
-		ForkMagic = 'DATA';
+		HLFileXferProtocolID = 'HTXF';
+		HLFileResumeMagic = 'RFLT';
+		HLForkMagic = 'DATA';
+		HLNewsArticleMIME = 'text/plain';
+		{ $46494C50 }
+		HLFlatFileMagic = 'FILP';
+		{ $494E464F }
+		HLFlatFileForkMagic = 'INFO';
+		HLOSMac = 'AMAC';
+		HLOSWin = 'MWIN';
+		L_URL = 'URL ';
+		L_JPEG = 'JPEG';
+		L_BMP = 'BMP ';
+		L_GIF = 'GIFf';
+		L_PICT = 'PICT';
 		{ Currently 1 }
-		ProtocolVersion = 1;
-		ProtocolSubVersion = 2;
+		HLProtocolVersion = 1;
+		HLProtocolSubVersion = 2;
 	{$I transaction_type.inc}
 	{$I transaction_id.inc}
 	{$I permissions.inc}
 	
 	type
-		{$I binary_data.inc}
-		{$I transaction_data.inc}
-		
+		{$I binary_types.inc}
 		PHLTransactionParam = ^THLTransactionParam;
 		THLTransactionParam = record
-			id: longword;
+			id: dword;
 			{ Size of the data part }
-			size: longword;
-		case type_id of
-			T_Error: ();
-			T_GetMsgs, T_NewMsg, T_OldPostNews:
-				(data: string);
-			T_ServerMsg: (server_msg: THLServerMessage);
-			T_SendChat: (send_chat: THLSendChat);
-			T_ChatMsg: (chat_msg: THLChatMessage);
-			T_Login: (login: THLLogin);
+			size: dword;
+			data: pointer;
 		end;
+		THLParameterList = specialize TVector<THLTransactionParam>;
 		
 		{ After the initial handshake, client and server communicate over the
 		connection by sending and receiving transactions. Every transaction contains
@@ -45,14 +54,18 @@ interface
 			FFlags: byte;
 			FIsReply: boolean;
 			FKind: word;
-			FId: longword;
-			FErrorCode: longword;
-			FTotalSize: longword;
-			FDataSize: longword;
-			FParamNum: word;
-			FParams: PHLTransactionParam;
+			FId: dword;
+			FErrorCode: dword;
+			FTotalSize: dword;
+			FDataSize: dword;
+			FParams: THLParameterList;
+			FStream: TStream;
 		public
-			constructor Create(AReply: boolean; AKind: word; AId: longword;
+			constructor CreateRequest(AKind: word; AId: dword; AStream: TStream);
+			constructor CreateReply(AKind: word; AId: dword; AErr: dword; AStream: TStream);
+			destructor Destroy; override;
+			procedure Add(constref param: THLTransactionParam);
+			function GetParam(i: integer): PHLTransactionParam; inline;
 			{ Reserved (should be 0) }
 			property Flags: byte read FFlags;
 			{ Request (false) or reply (true) }
@@ -60,16 +73,67 @@ interface
 			{ Requested operation (user defined) }
 			property Kind: word read FKind;
 			{ Unique transaction ID (must be <> 0) }
-			property ID: longword read FId;
+			property ID: dword read FId;
 			{ Used in the reply (user defined, 0 = no error) }
-			property ErrorCode: longword read FErrorCode;
+			property ErrorCode: dword read FErrorCode;
 			{ Total data size for the transaction (all parts) }
-			property TotalSize: longword read FTotalSize;
+			property TotalSize: dword read FTotalSize;
 			{ Size of data in this transaction part. This allows splitting large
 			transactions into smaller parts. }
-			property DataSize: longword read FDataSize;
-			{ Number of the parameters for this transaction }
-			property ParamNum: word read FParamNum;
+			property DataSize: dword read FDataSize;
+			property Parameter[i: integer]: PHLTransactionParam read GetParam;
 		end;
 implementation
+	constructor THLTransaction.CreateRequest(AKind: word; AId: dword; AStream: TStream);
+	begin
+		FFlags := 0;
+		FIsReply := false;
+		FKind := AKind;
+		FId := AId;
+		FErrorCode := 0;
+		FTotalSize := 22;
+		FDataSize := 2;
+		FParams := nil;
+		FStream := AStream;
+	end;
+	
+	constructor THLTransaction.CreateReply(AKind: word; AId: dword; AErr: dword = 0; AStream: TStream);
+	begin
+		FFlags := 0;
+		FIsReply := true;
+		FKind := AKind;
+		FId := AId;
+		FErrorCode := AErr;
+		FTotalSize := 22;
+		FDataSize := 2;
+		FParams := nil;
+		FStream := AStream;
+	end;
+	
+	destructor THLTransaction.Destroy;
+	var
+		i: integer;
+	begin
+		if FParams <> nil then begin
+			for i := 0 to FParams.size-1 do begin
+				if FParams.items[i].data <> nil then
+					freemem(FParams.items[i].data);
+			end;
+			FParams.free;
+		end;
+	end;
+	
+	procedure THLTransaction.Add(constref param: THLTransactionParam);
+	begin
+		if FParams = nil then
+			FParams := THLParameterList.Create;
+		FParams.pushback(param);
+		inc(FTotalSize, 8 + param.size);
+		inc(FDataSize, 8 + param.size);
+	end;
+	
+	function THLTransaction.GetParam(i: integer): PHLTransactionParam;
+	begin
+		result := FParams.items[i];
+	end;
 end.

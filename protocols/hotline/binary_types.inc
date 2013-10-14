@@ -5,8 +5,8 @@ THLFileInfo = record
 	size: longword;
 	reserved: longword;
 	name_script: word;
-	name_size: word;
-	name: pchar;
+	name: string;
+	procedure FromFile(f: file);
 end;
 
 PHLPath = ^THLPath;
@@ -14,8 +14,9 @@ PHLPath = ^THLPath;
 THLPath = record
 	dir_levels: word;
 	unknown: word;
-	dirname_size: byte;
-	dirname: pchar;
+	dirname: string;
+	procedure FromFilePath(filepath: string);
+	function ToFilePath: string;
 end;
 
 PHLFork = ^THLFork;
@@ -52,6 +53,8 @@ THLDate = record
 	year: word;
 	millisecs: word;
 	secs: longword;
+	procedure FromDateTime(dt: TDateTime);
+	function ToDateTime: TDateTime;
 end;
 
 PHLUserInfo = ^THLUserInfo;
@@ -59,8 +62,7 @@ THLUserInfo = record
 	id: word;
 	icon_id: word;
 	flags: word;
-	name_size: word;
-	name: pchar;
+	name: string;
 end;
 
 PHLNewsCategoriesData1 = ^THLNewsCategoriesData1;
@@ -73,8 +75,7 @@ end;
 
 PHLMime = ^THLMime;
 THLMime = record
-	size: byte;
-	txt: pchar;
+	txt: string;
 	article_size: word;
 end;
 
@@ -85,12 +86,10 @@ THLArticle = record
 	parent_id: longword;
 	flags: longword;
 	mime_num: word;
-	title_size: byte;
 	{ Title string }
-	title: pchar;
-	poster_size: byte;
+	title: string;
 	{ Poster string }
-	poster: pchar;
+	poster: string;
 	{ Optional (if mime_num > 0) }
 	mimes: PHLMime;
 end;
@@ -100,29 +99,24 @@ THLNewsArticlesData = record
 	id: longword;
 	{ Number of articles }
 	article_num: longword;
-	name_size: byte;
 	{ Name string }
-	name: pchar;
-	desc_size: byte;
+	name: string;
 	{ Description string }
-	description: pchar;
+	description: string;
 	articles: PHLArticle;
 end;
 
 PHLNewsCategoriesData2 = ^THLNewsCategoriesData2;
 THLNewsCategoriesData2 = record
 	{ Bundle (2) or category (3) }
-	kind: word;
-case kind of
+case kind: word of
 	2:
 		(bunnum: word;
-		 bunname_size: byte;
-		 bunname: pchar);
+		 bunname: string);
 	3:
 		(catnum: word;
 		 guid: TGuid;
 		 add_sn: longword;
 		 del_sn: longword;
-		 catname_size: byte;
-		 name: pchar);
+		 catname: string);
 end;
