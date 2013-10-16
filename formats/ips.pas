@@ -24,7 +24,7 @@ interface
 		
 		TIPSPatch = class
 		private type
-		{ It's the record of a single patch }
+			{ It's the record of a single patch }
 			TEntry = record
 				offset: dword;
 				{ The size of the data to put from the specified offset in the patching file.
