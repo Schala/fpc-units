@@ -4,3 +4,4 @@
 *.dll
 *.compiled
 *.res
+*.dbg

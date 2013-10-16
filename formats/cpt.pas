@@ -81,6 +81,7 @@ implementation
 			for i:=0 to length(FFiles)-1 do
 				FFiles[i].buf.free;
 		setlength(FFiles, 0);
+		inherited Destroy;
 	end;
 	
 	procedure TCPTContainer.Add(const filename: string);

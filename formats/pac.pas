@@ -53,7 +53,8 @@ implementation
 		for i:=0 to l-1 do
 			with FFiles[i] do begin
 				offset := leton(AStream.readdword);
-				AStream.readbuffer(path, 32);
+				setlength(path, 32);
+				AStream.readbuffer(path[1], 32);
 			{$ifdef WINDOWS}
 				path := replacestr(path, '/', directoryseparator);
 			{$endif WINDOWS}
@@ -80,6 +81,7 @@ implementation
 					setlength(path, 0);
 				end;
 		setlength(FFiles, 0);
+		inherited Destroy;
 	end;
 	
 	procedure TPACContainer.Add(const filepath: string);

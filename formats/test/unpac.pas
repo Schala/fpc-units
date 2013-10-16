@@ -4,7 +4,6 @@ program unpac;
 var
 	f: tfilestream;
 	p: tpaccontainer;
-	i: integer;
 begin
 	f := tfilestream.create(paramstr(1), fmopenread);
 	p := tpaccontainer.create(f);
