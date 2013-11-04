@@ -120,3 +120,45 @@ case kind: word of
 		 del_sn: longword;
 		 catname: string);
 end;
+
+PHLUserAccess = ^THLUserAccess;
+THLUserAccess = bitpacked record
+	rm_file,
+	ul_file,
+	dl_file,
+	rename_file,
+	mv_file,
+	mk_dir,
+	rm_dir,
+	rename_dir,
+	mv_dir,
+	read_chat,
+	send_chat,
+	open_chat,
+	close_chat,
+	show_in_list,
+	mk_user,
+	rm_user,
+	open_user,
+	edit_user,
+	edit_own_pw,
+	send_pm,
+	news_read_art,
+	news_post_art,
+	kick,
+	unkickable,
+	get_client_info,
+	ul_anywhere,
+	any_name,
+	no_tos,
+	set_file_blurb,
+	set_dir_blurb,
+	view_dropboxes,
+	make_alias,
+	broadcast,
+	rm_news_art,
+	mk_news_cat,
+	rm_news_cat,
+	mk_news_dir,
+	rm_news_dir: boolean;
+end;

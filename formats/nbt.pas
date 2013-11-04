@@ -16,7 +16,7 @@ interface
 	
 	type
 	{$packenum 1}
-		TNBTFlags = (
+		TNBTFlag = (
 			nbtfNone = 0,
 			nbtfGZipped,
 			nbtfXMemCompress );
@@ -34,7 +34,6 @@ interface
 			nbtList,
 			nbtCompound,
 			nbtIntArray );
-	{$packenum default}
 	
 		ENamedBinaryTag = class(exception)
 		end;
@@ -182,7 +181,7 @@ interface
 			procedure Push(const a: TNBTVector); overload;
 			procedure Pop(i: longint); overload;
 			procedure Pop(first, last: longint); overload;
-			//function Pack(AFlag: TNBTFlags = nbtfGZipped): TStream;
+			//function Pack(AFlag: TNBTFlag = nbtfGZipped): TStream;
 			property Data: TNBTVector read FData write FData;
 		end;
 		

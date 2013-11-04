@@ -191,8 +191,8 @@ const
 	CCB_COMPACTING_FILES = 4;  
 	CCB_CLOSING_ARCHIVE = 5;  
 type
-	SFILE_ADDFILE_CALLBACK = procedure (var pvUserData:pointer; dwBytesWritten:DWORD; dwTotalBytes:DWORD; bFinalCall:boolean);
-	SFILE_COMPACT_CALLBACK = procedure (var pvUserData:pointer; dwWorkType:DWORD; BytesProcessed:qword; TotalBytes:qword);
+	TSFILE_ADDFILE_CALLBACK = procedure (var pvUserData:pointer; dwBytesWritten:DWORD; dwTotalBytes:DWORD; bFinalCall:boolean);
+	TSFILE_COMPACT_CALLBACK = procedure (var pvUserData:pointer; dwWorkType:DWORD; BytesProcessed:qword; TotalBytes:qword);
 	
 	PFileStream = ^TFileStream;
 	TFileStream = record
@@ -513,7 +513,7 @@ function SFileGetArchiveBitmap(hMpq:pointer; var pBitmap:TFileBitmap; Length:DWO
 function SFileFlushArchive(hMpq:pointer):boolean;external External_library name 'SFileFlushArchive';
 function SFileCloseArchive(hMpq:pointer):boolean;external External_library name 'SFileCloseArchive';
 function SFileAddListFile(hMpq:pointer; szListFile:Pchar):longint;external External_library name 'SFileAddListFile';
-function SFileSetCompactCallback(hMpq:pointer; CompactCB:SFILE_COMPACT_CALLBACK; var pvData:pointer):boolean;external External_library name 'SFileSetCompactCallback';
+function SFileSetCompactCallback(hMpq:pointer; CompactCB:TSFILE_COMPACT_CALLBACK; var pvData:pointer):boolean;external External_library name 'SFileSetCompactCallback';
 function SFileCompactArchive(hMpq:pointer; szListFile:Pchar; bReserved:boolean):boolean;external External_library name 'SFileCompactArchive';
 function SFileGetMaxFileCount(hMpq:pointer):DWORD;external External_library name 'SFileGetMaxFileCount';
 function SFileSetMaxFileCount(hMpq:pointer; dwMaxFileCount:DWORD):boolean;external External_library name 'SFileSetMaxFileCount';
@@ -554,7 +554,7 @@ function SFileRemoveFile(hMpq:pointer; szFileName:Pchar; dwSearchScope:DWORD):bo
 function SFileRenameFile(hMpq:pointer; szOldFileName:Pchar; szNewFileName:Pchar):boolean;external External_library name 'SFileRenameFile';
 function SFileSetFileLocale(hFile:pointer; lcNewLocale:cardinal):boolean;external External_library name 'SFileSetFileLocale';
 function SFileSetDataCompression(DataCompression:DWORD):boolean;external External_library name 'SFileSetDataCompression';
-function SFileSetAddFileCallback(hMpq:pointer; AddFileCB:SFILE_ADDFILE_CALLBACK; var pvData:pointer):boolean;external External_library name 'SFileSetAddFileCallback';
+function SFileSetAddFileCallback(hMpq:pointer; AddFileCB:TSFILE_ADDFILE_CALLBACK; var pvData:pointer):boolean;external External_library name 'SFileSetAddFileCallback';
 function SCompImplode(var pvOutBuffer:pointer; var pcbOutBuffer:longint; var pvInBuffer:pointer; cbInBuffer:longint):longint;external External_library name 'SCompImplode';
 function SCompExplode(var pvOutBuffer:pointer; var pcbOutBuffer:longint; var pvInBuffer:pointer; cbInBuffer:longint):longint;external External_library name 'SCompExplode';
 function SCompCompress(var pvOutBuffer:pointer; var pcbOutBuffer:longint; var pvInBuffer:pointer; cbInBuffer:longint; uCompressionMask:dword; 

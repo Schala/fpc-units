@@ -6,6 +6,10 @@ interface
 	uses
 		classes;
 	
+	const
+		CPTEofPtrMarker = 8;
+		CPTEofPtrNoMarker = 4;
+
 	type
 		{ A cpt begins with a four-byte little-endian giving the number of subfiles it
 		contains, followed by a series of four-byte pointers indicating the beginning of
@@ -41,9 +45,9 @@ implementation
 	begin
 		FHasEOFMarker := AHasEOFMarker;
 		if FHasEOFMarker then
-			FEofPos := 8
+			FEofPos := CPTEofPtrMarker
 		else
-			FEofPos := 4;
+			FEofPos := CPTEofPtrNoMarker;
 		FFiles := nil;
 	end;
 	

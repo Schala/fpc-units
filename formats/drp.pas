@@ -9,6 +9,7 @@ interface
 	const
 		{ The first three bytes spell out "drp" in ASCII. }
 		DRPMagic = 'drp'#0;
+		DRPHeaderSize = 12;
 		
 	type
 	{$packenum 1}
@@ -49,7 +50,6 @@ interface
 			ft1A,
 			{ LZSS compressed data }
 			ftLZSS = 37 );
-	{$packenum default}
 		
 		EDRPRead = class(exception)
 		end;
@@ -111,7 +111,7 @@ implementation
 		AStream.seek(8, sofrombeginning);
 		setlength(FFiles, AStream.readdword div 64);
 		l := length(FFiles);
-		AStream.seek(12, sofrombeginning);
+		AStream.seek(DRPHeaderSize, sofrombeginning);
 		for i:=0 to l-1 do
 			FFiles[i].offset := leton(AStream.readdword);
 		for i:=0 to l-1 do
@@ -124,7 +124,7 @@ implementation
 				move(s, size, 3);
 				size := leton(size) div 16;
 				buf := TMemoryStream.Create;
-				AStream.seek(offset+12, sofrombeginning);
+				AStream.seek(offset+DRPHeaderSize, sofrombeginning);
 				buf.copyfrom(AStream, size);
 			end;
 	end;
@@ -170,7 +170,7 @@ implementation
 			ftAnim: result := '.anim';
 			ftLZSS: result := '.lzss';
 		else
-			result := '.out';
+			result := '.dat';
 		end;
 	end;
 end.

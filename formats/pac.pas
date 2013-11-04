@@ -9,12 +9,19 @@ unit pac;
 interface
 	uses
 		classes;
+	
+	const
+		PACDefaultSize = 16;
+		PACStartOffset = 8;
+		PACPathLength = 32;
+		PACOffsetEntrySize = 36;
+
 	type
 		TPACContainer = class
 		private type
 			TFileEntry = record
 				offset: dword;
-				path: string[32];
+				path: string[PACPathLength];
 				buf: TMemoryStream;
 			end;
 		private var
@@ -36,7 +43,7 @@ implementation
 	
 	constructor TPACContainer.Create;
 	begin
-		FSize := 16;
+		FSize := PACDefaultSize;
 		FFiles := nil;
 	end;
 	
@@ -44,7 +51,7 @@ implementation
 	var
 		i, l: dword;
 	begin
-		AStream.seek(8, sofrombeginning);
+		AStream.seek(PACStartOffset, sofrombeginning);
 		setlength(FFiles, leton(AStream.readdword));
 		l := length(FFiles);
 		FSize := leton(AStream.readdword);
@@ -53,8 +60,8 @@ implementation
 		for i:=0 to l-1 do
 			with FFiles[i] do begin
 				offset := leton(AStream.readdword);
-				setlength(path, 32);
-				AStream.readbuffer(path[1], 32);
+				setlength(path, PACPathLength);
+				AStream.readbuffer(path[1], PACPathLength);
 			{$ifdef WINDOWS}
 				path := replacestr(path, '/', directoryseparator);
 			{$endif WINDOWS}
@@ -98,16 +105,16 @@ implementation
 				buf.copyfrom(f, 0);
 				f.free;
 				path := filepath;
-				setlength(path, 32);
+				setlength(path, PACPathLength);
 			{$ifdef WINDOWS}
 				path := replacestr(path, directoryseparator, '/');
 			{$endif WINDOWS}
-				offset := FSize+36;
-				inc(FSize, buf.size+36);
+				offset := FSize+PACOffsetEntrySize;
+				inc(FSize, buf.size+PACOffsetEntrySize);
 			end;
 			if l > 1 then
 				for i:=0 to l-2 do
-					inc(FFiles[i].offset, 36);
+					inc(FFiles[i].offset, PACOffsetEntrySize);
 		end;
 	end;
 	
@@ -123,7 +130,7 @@ implementation
 		for i:=0 to l-1 do
 			with FFiles[i] do begin
 				result.writedword(ntole(offset));
-				result.writebuffer(path, 32);
+				result.writebuffer(path, PACPathLength);
 			end;
 		for i:=0 to l-1 do
 			result.copyfrom(FFiles[i].buf, 0);

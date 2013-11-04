@@ -115,7 +115,7 @@ implementation
 		l := length(FEntries);
 		for i:=0 to l-1 do begin
 			str(i, idxstr);
-			f := TFileStream.Create(idxstr+'.out', fmcreate);
+			f := TFileStream.Create(idxstr+'.dat', fmcreate);
 			with FEntries[i] do
 				if data.size = 0 then
 					writeln('RLE record at index ', i)

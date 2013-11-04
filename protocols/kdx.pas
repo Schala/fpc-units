@@ -2,6 +2,7 @@ unit kdx;
 {$modeswitch result}
 interface
 	function Encrypt(key: dword; const data: pbyte; datasize: dword): dword;
+
 implementation
 	function Encrypt(key: dword; const data: pbyte; datasize: dword): dword;
 	var
@@ -16,4 +17,5 @@ implementation
 		end;
 		result := key;
 	end;
+
 end.

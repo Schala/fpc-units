@@ -1,10 +1,9 @@
 unit hotline;
 {$mode objfpc}{$H+}
 {$modeswitch advancedrecords}
-{$inline on}
 interface
 	uses
-		Classes, fpSock, gvector;
+		classes, fgl;
 
 	const
 		{ $54525450 }
@@ -30,20 +29,17 @@ interface
 		{ Currently 1 }
 		HLProtocolVersion = 1;
 		HLProtocolSubVersion = 2;
-	{$I transaction_type.inc}
-	{$I transaction_id.inc}
-	{$I permissions.inc}
 	
 	type
-		{$I binary_types.inc}
+	{$I enums.inc}
+	{$I binary_types.inc}
+	
 		PHLTransactionParam = ^THLTransactionParam;
 		THLTransactionParam = record
 			id: dword;
-			{ Size of the data part }
-			size: dword;
-			data: pointer;
+			data: TMemoryStream;
 		end;
-		THLParameterList = specialize TVector<THLTransactionParam>;
+		THLParameterList = specialize TFPGList<THLTransactionParam>;
 		
 		{ After the initial handshake, client and server communicate over the
 		connection by sending and receiving transactions. Every transaction contains
@@ -65,7 +61,7 @@ interface
 			constructor CreateReply(AKind: word; AId: dword; AErr: dword; AStream: TStream);
 			destructor Destroy; override;
 			procedure Add(constref param: THLTransactionParam);
-			function GetParam(i: integer): PHLTransactionParam; inline;
+			function GetParam(i: integer): PHLTransactionParam;
 			{ Reserved (should be 0) }
 			property Flags: byte read FFlags;
 			{ Request (false) or reply (true) }
@@ -127,7 +123,7 @@ implementation
 	begin
 		if FParams = nil then
 			FParams := THLParameterList.Create;
-		FParams.pushback(param);
+		FParams.add(param);
 		inc(FTotalSize, 8 + param.size);
 		inc(FDataSize, 8 + param.size);
 	end;

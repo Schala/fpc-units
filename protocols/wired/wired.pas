@@ -1,5 +1,6 @@
 unit wired;
 {$mode objfpc}{$H+}
+{$modeswitch advancedrecords}
 interface
 	const
 		{ <US-ASCII EOT, end of transmission (4)> }
@@ -12,7 +13,10 @@ interface
 		RS = #30;
 		{ <US-ASCII SP, space (32)> }
 		SP = #32;
+		{ The protocol version string uses a fixed format }
+		WiProtocolVersion = '1.1';
 	type
-	
+		{$I types.inc}
+
 implementation
 end.
