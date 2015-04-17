@@ -124,12 +124,12 @@ implementation
 				4:
 					begin
 						p := Stream.readbyte;
-						Img.pixels[x,y] := p and $f0;
+						Img.pixels[x,y] := swap(dword(p and $f0));
 						inc(x);
-						Img.pixels[x,y] := p and $f;
+						Img.pixels[x,y] := swap(dword(p and $f));
 					end;
-				8: Img.pixels[x,y] := Stream.readbyte;
-				16: Img.pixels[x,y] := RGBA5551ToDWord(leton(Stream.readword));
+				8: Img.pixels[x,y] := swap(dword(Stream.readbyte));
+				16: Img.pixels[x,y] := swap(RGBA5551ToDWord(leton(Stream.readword)));
 				else
 				end;
 				
