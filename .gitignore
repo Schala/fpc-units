@@ -1,7 +1,10 @@
-*.ppu
+*.a
+*.compiled
+*.dll
+*.dylib
 *.exe
 *.o
-*.dll
-*.compiled
+*.ppu
 *.res
-*.dbg
+*.rst
+*.so
